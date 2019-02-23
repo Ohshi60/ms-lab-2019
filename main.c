@@ -86,7 +86,7 @@ int loadLab(){
 						laby.exit = atoi(tmp);
 						printf(" %d", laby.exit);
 					}
-					if( start == 3){
+					if( start <= 3){
 						int Array[laby.width][laby.height];
 						puts("Hi");
 						
