@@ -160,7 +160,7 @@ void get_lab(char* file_name,struct labyrinth *lab){
   }
   fclose(file);
 }
-
+/*
 int move(int row,int col,lab *lab,int dir){
   row--;
   col--;
@@ -205,6 +205,7 @@ int move(int row,int col,lab *lab,int dir){
     move(row,col,lab,dir);
   }  
 }
+*/
 void alloc_visited(lab *lab){
     int rows = lab->height;
     int cols = lab->width;
@@ -226,7 +227,7 @@ int main(){
   print_lab(plab);
   init_cells(plab);
   print_lab(plab);
-  move(0,plab->entry,plab,2);
+  //move(0,plab->entry,plab,2);
   print_lab(plab);
   return 0;
 }
