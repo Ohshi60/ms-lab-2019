@@ -34,6 +34,8 @@ typedef struct labyrinth {
     cell **cells;
 } lab;
 
+int** visited;
+
 void alloc_cells(lab *lab){
   lab->cells = malloc(lab->height*sizeof(cell));
   for(int i = 0;i < lab->width;i++){
@@ -80,7 +82,6 @@ void fill_cell(cell *c){
 
 int next_dir(cell *c){
     puts("Next Direction");
-    
     fill_cell(c);
     int result = 0;
     if (!c->north){
@@ -162,61 +163,84 @@ void get_lab(char* file_name,struct labyrinth *lab){
 }
 /*
 int move(int row,int col,lab *lab,int dir){
-  row--;
-  col--;
   int goal_y = lab->height-1;
   int goal_x = lab->exit-1;
+  int start_x = lab->entry-1;
+  int start_y = 0;
   if(row == goal_y && col == goal_x){
       return 1;
       puts("Found it");
   }
+
+  if(dir == 0){
+    //start
+    dir = next_dir(&lab->cells[row][col]);
+  }
   if(dir == 1){
+    int last_direction = 2;
     puts("Going North");
     printf("dir%d, row %d,col %d",dir,row,col);
-
-    row--;
-    lab->cells[row][col].value = lab->cells[row][col].value + dir;
-    dir = next_dir(&lab->cells[row][col]);
-    printf("dir%d, row %d,col %d",dir,row,col);
-  
-    move(row,col,lab,dir);
+   row--;
   }else if(dir == 2){
+    int last_direction = 1;
     puts("Going South");
-    printf("dir%d, row %d,col %d",dir,row,col);
     row++;
-    lab->cells[row][col].value + dir;
-    dir = next_dir(&lab->cells[row][col]);  
-    move(row,col,lab,dir);
+    int test = (lab->cells[row][col].value)+last_direction;
+    lab->cells[row][col].value = test;
+    
+    printf("value is %d",test);
+    printf("dir%d, row %d,col %d, value of cell %d\n",dir,row,col,lab->cells[row][col].value);
+    
   }else if(dir == 4){
+    int last_direction = 8;
+
     puts("Going East");
-    col++;
-
     printf("dir%d, row %d,col %d",dir,row,col);
-    lab->cells[row][col].value = lab->cells[row][col].value + dir;
-    dir = next_dir(&lab->cells[row][col]);  
-    move(row,col,lab,dir);
+    
+    col++;
   }else if(dir == 8){
+    int last_direction = 4;
+    
     puts("Going West");
+    printf("dir%d, row %d,col %d",dir,row,col);
+    
     col--;
+  }
+  dir = next_dir(&lab->cells[row][col]);
+  printf("dir%d, row %d,col %d, value of cell %d\n",dir,row,col,lab->cells[row][col].value);
 
-    printf("%d, %d",dir,lab->cells[row][col].value);
-    lab->cells[row][col].value = lab->cells[row][col].value + dir;
-    dir = next_dir(&lab->cells[row][col]);;  
-    move(row,col,lab,dir);
-  }  
+  move(row,col,lab,dir);
+
+}*/
+//
+int dfs(int row, int col,lab *lab){
+  cell *current = &lab->cells[col][row];
+  int goal_y = lab->height-1;
+  int goal_x = lab->exit-1;
+  int start_x = lab->entry-1;
+  int start_y = 0;
+     printf("Hello value at row %d col %d is %d", lab->cells[col][row].value,current->value, col);
+     printf("lab height %dlab width %dlab exit %dlab entry %d ", lab->height,lab->width,lab->entry,lab->exit, col);
+
+  current->value = (current->value+1);
+  if(row == goal_y && col == goal_x){
+      return 1;
+      puts("Found it");
+  }
+   printf("Hello value at row %d col %d is %d", lab->cells[col][row].value,current->value, col);
+  print_lab("Changing value");
+//current->value = temp+1;
 }
-*/
 void alloc_visited(lab *lab){
     int rows = lab->height;
     int cols = lab->width;
     int** maze = malloc(rows * sizeof(int));
     for (int i= 0;i < rows;i++){
       maze[i] = malloc(cols * sizeof(int));
-  }
+    }
 }
 void get_visited(lab *l,int** visited){
   alloc_visited(l);
-
 
 }
 int main(){
@@ -227,7 +251,8 @@ int main(){
   print_lab(plab);
   init_cells(plab);
   print_lab(plab);
-  //move(0,plab->entry,plab,2);
-  print_lab(plab);
+  dfs(0, lab1.entry-1,plab);
+  //move(0,plab->entry,plab,0);
+  //print_lab(plab);
   return 0;
 }
